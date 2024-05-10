@@ -48,13 +48,14 @@ async function start(client) {
   client.onMessage(async (message) => {
     if (message.body !== null) {
       try {
-        const gptResponse = await openai.Completion.create({
-          engine: 'davinci',
+        const gptResponse = await openai.completions.create({
+          model: 'gpt-3.5-turbo-instruct',
+          // messages: [{ role: "system", content: message.body }],
           prompt: message.body,
           max_tokens: 150
         });
 
-        const gptMessage = gptResponse.data.choices[0].text;
+        const gptMessage = gptResponse.choices[0].text;
 
         client.sendText(message.from, gptMessage);
       } catch (error) {
